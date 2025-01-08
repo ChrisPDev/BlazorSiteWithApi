@@ -1,0 +1,2 @@
+# BlazorSiteWithApi
+ Demo project
