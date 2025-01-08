@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Reflection.Emit;
+using DomainModels.Models;
 
 namespace API.Data
 {
@@ -9,6 +10,7 @@ namespace API.Data
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }
 
         // Add DBSet for each model
+        public DbSet<Person> Persons { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

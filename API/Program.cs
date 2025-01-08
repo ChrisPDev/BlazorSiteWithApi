@@ -42,6 +42,7 @@ namespace API
             app.UseCors(MyAllowSpecificOrigins);
 
             // Configure the HTTP request pipeline.
+            // https://blazorsitewithapi.onrender.com/swagger/index.html
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
