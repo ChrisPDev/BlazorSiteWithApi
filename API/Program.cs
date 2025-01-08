@@ -1,4 +1,7 @@
 
+using API.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace API
 {
     public class Program
@@ -7,6 +10,20 @@ namespace API
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+            // Specify when frontend is created
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    name: MyAllowSpecificOrigins,
+                    policy =>
+                    {
+                        policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+                    }
+                );
+            });
+
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -14,7 +31,13 @@ namespace API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // Configure Entity Framework with PostgreSQL
+            builder.Services.AddDbContext<DatabaseContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
             var app = builder.Build();
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -22,10 +45,15 @@ namespace API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            else
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
 
             app.MapControllers();
